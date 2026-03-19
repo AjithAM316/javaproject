@@ -1,0 +1,39 @@
+# Compiled class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.project
+*.classpath
+.settings/
+
+# Build directories
+bin/
+target/
+build/
+out/
+
+# Database files (local)
+*.db
+*.sqlite
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Keep the lib directory structure but ignore downloaded JARs
+# (users can download mysql-connector themselves)
+lib/*.jar
+
+# But keep any README in lib
+!lib/README.md
