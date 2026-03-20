@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Library System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <main id="login-screen" class="page active">
+        <div class="card">
+            <div class="branding">
+                <h2>Smart Library.</h2>
+                <p>Welcome back. Please sign in.</p>
+            </div>
+            
+            <div id="auth-forms">
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required placeholder="admin or student">
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required placeholder="••••••••">
+                    </div>
+                    <div class="error-msg" id="login-error"></div>
+                    <button type="submit" class="btn-primary">Sign In</button>
+                    <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem;">Don't have an account? <a href="#" onclick="toggleRegister(true); return false;" style="color: var(--primary)">Register as Student</a></p>
+                </form>
+
+                <form id="register-form" style="display: none;">
+                    <div class="input-group">
+                        <label>Username</label>
+                        <input type="text" id="reg-username" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="reg-password" required minlength="4">
+                    </div>
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="reg-fullname" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="reg-email">
+                    </div>
+                    <div class="input-group">
+                        <label>Phone</label>
+                        <input type="text" id="reg-phone">
+                    </div>
+                    <div class="error-msg" id="register-error"></div>
+                    <button type="submit" class="btn-primary" style="background: var(--success)">Register & Login</button>
+                    <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem;"><a href="#" onclick="toggleRegister(false); return false;" style="color: var(--text-secondary)">Back to Login</a></p>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Main App Shell (Hidden until login) -->
+    <div id="app-shell" class="page">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Smart Library</h1>
+            </div>
+            <div class="nav-links">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; margin-right: 15px;">Welcome, <strong id="user-name">User</strong></span>
+                <button id="nav-catalogue" class="active" onclick="navigateTo('catalogue')">Catalogue</button>
+                <button id="nav-history" onclick="navigateTo('history')">My History</button>
+                <button id="nav-admin" class="hidden" onclick="navigateTo('admin')">Admin Panel</button>
+                <button id="logout-btn" style="color: var(--error)">Logout</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            
+            <!-- Page: Catalogue -->
+            <section id="page-catalogue" class="card page active">
+                <div class="section-header">
+                    <h3>Library Catalogue</h3>
+                </div>
+                
+                <div class="category-filters" id="category-filters">
+                    <button class="cat-chip active" onclick="filterCategory('All')">All</button>
+                    <button class="cat-chip" onclick="filterCategory('Computer Science')">Computer Science</button>
+                    <button class="cat-chip" onclick="filterCategory('History')">History</button>
+                    <button class="cat-chip" onclick="filterCategory('Politics')">Politics</button>
+                    <button class="cat-chip" onclick="filterCategory('Maths')">Maths</button>
+                    <button class="cat-chip" onclick="filterCategory('Physics')">Physics</button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Author</th>
+                                <th>ISBN</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="books-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Page: Book Details -->
+            <section id="page-book-details" class="card page">
+                <button class="btn-secondary" onclick="navigateTo('catalogue')" style="margin-bottom: 20px;">&larr; Back to Catalogue</button>
+                <div class="book-detail-container">
+                    <h2 id="detail-title" style="margin-bottom: 10px; font-size: 1.8rem; color: var(--text-primary)"></h2>
+                    <p id="detail-author" style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 5px;"></p>
+                    <p id="detail-isbn" style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;"></p>
+                    
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid var(--surface-border); margin-bottom: 24px;">
+                        <h4 style="margin-bottom: 10px; color: var(--text-primary)">About this Book</h4>
+                        <p id="detail-desc" style="line-height: 1.6; color: var(--text-secondary)"></p>
+                    </div>
+                    
+                    <button id="detail-borrow-btn" class="btn-primary" style="max-width: 250px; font-size: 1.05rem;"></button>
+                </div>
+            </section>
+
+            <!-- Page: Borrowing History -->
+            <section id="page-history" class="card page">
+                <div class="section-header">
+                    <h3>My Borrowing History</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Book ID</th>
+                                <th>Issue Date</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Fine (₹)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Page: Librarian Admin -->
+            <section id="page-admin" class="card page">
+                <div class="section-header">
+                    <h3>All Active Issues</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Issue ID</th>
+                                <th>User ID</th>
+                                <th>Book ID</th>
+                                <th>Issue Date</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </div>
+    
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

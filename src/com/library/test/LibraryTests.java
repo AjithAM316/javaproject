@@ -92,7 +92,7 @@ public class LibraryTests {
         System.out.println("── TEST 2: Book Availability Logic ─────────────────────────────");
 
         // Test 2a: Book with 2 copies, issued twice → available should be 0
-        Book book = new Book("123", "Test Book", "Author", "Pub", "Genre", 2020, 2);
+        Book book = new Book("123", "Test Book", "Author", "Pub", "Genre", 2020, "Description", 2);
         assertTest("Initial available = total", book.getAvailableCopies() == 2,
             "Expected available=2, got " + book.getAvailableCopies());
 

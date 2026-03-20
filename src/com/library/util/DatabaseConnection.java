@@ -10,9 +10,9 @@ import java.sql.SQLException;
  */
 public class DatabaseConnection {
 
-    private static final String URL      = "jdbc:mysql://localhost:3306/smart_library?useSSL=false&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://localhost:3306/library_db?allowPublicKeyRetrieval=true&useSSL=false";
     private static final String USER     = "root";
-    private static final String PASSWORD = "your_password"; // Change this
+    private static final String PASSWORD = "Admin@123"; // Change this
 
     private static Connection connection = null;
 

@@ -91,9 +91,10 @@ public class LibrarianMenu {
         String publisher = ConsoleHelper.readLine("  Publisher:      ");
         String genre     = ConsoleHelper.readLine("  Genre:          ");
         int year         = ConsoleHelper.readInt("  Year Published: ");
+        String description = ConsoleHelper.readLine("  Description:    ");
         int copies       = ConsoleHelper.readInt("  Total Copies:   ");
 
-        Book book = new Book(isbn, title, author, publisher, genre, year, copies);
+        Book book = new Book(isbn, title, author, publisher, genre, year, description, copies);
         service.addBook(book);
         ConsoleHelper.printSuccess("Book '" + title + "' added successfully!");
         ConsoleHelper.pause();

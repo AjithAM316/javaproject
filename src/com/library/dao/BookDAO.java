@@ -71,7 +71,7 @@ public class BookDAO {
 
     public boolean addBook(Book book) throws SQLException {
         String sql = "INSERT INTO books (isbn, title, author, publisher, genre, year_published, " +
-                     "total_copies, available_copies) VALUES (?,?,?,?,?,?,?,?)";
+                     "description, total_copies, available_copies) VALUES (?,?,?,?,?,?,?,?,?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -81,8 +81,9 @@ public class BookDAO {
             ps.setString(4, book.getPublisher());
             ps.setString(5, book.getGenre());
             ps.setInt(6, book.getYearPublished());
-            ps.setInt(7, book.getTotalCopies());
+            ps.setString(7, book.getDescription());
             ps.setInt(8, book.getTotalCopies());
+            ps.setInt(9, book.getTotalCopies());
             return ps.executeUpdate() > 0;
         }
     }
@@ -91,7 +92,7 @@ public class BookDAO {
         // BUG FIX: Atomic update that adjusts available_copies if total_copies is reduced
         // Prevents data inconsistency where available_copies > total_copies
         String sql = "UPDATE books SET title=?, author=?, publisher=?, genre=?, year_published=?, " +
-                     "total_copies=?, " +
+                     "description=?, total_copies=?, " +
                      "available_copies = LEAST(available_copies, ?) " +
                      "WHERE book_id=?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -103,9 +104,10 @@ public class BookDAO {
             ps.setString(3, book.getPublisher());
             ps.setString(4, book.getGenre());
             ps.setInt(5, book.getYearPublished());
-            ps.setInt(6, newTotal);
-            ps.setInt(7, newTotal);  // LEAST(available_copies, newTotal)
-            ps.setInt(8, book.getBookId());
+            ps.setString(6, book.getDescription());
+            ps.setInt(7, newTotal);
+            ps.setInt(8, newTotal);  // LEAST(available_copies, newTotal)
+            ps.setInt(9, book.getBookId());
             return ps.executeUpdate() > 0;
         }
     }
@@ -180,6 +182,7 @@ public class BookDAO {
         b.setPublisher(rs.getString("publisher"));
         b.setGenre(rs.getString("genre"));
         b.setYearPublished(rs.getInt("year_published"));
+        b.setDescription(rs.getString("description"));
         b.setTotalCopies(rs.getInt("total_copies"));
         b.setAvailableCopies(rs.getInt("available_copies"));
         Timestamp ts = rs.getTimestamp("added_at");
